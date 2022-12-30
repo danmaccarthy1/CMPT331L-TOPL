@@ -1,0 +1,32 @@
+%Daniel MacCarthy
+-module(helloworld). %just imagine that says CaesarCipher
+-export([start/0,shiftChar/2,encrypt/2,decrypt/2,solve/2]).
+
+shiftChar(Char, ShiftAmount) when (Char /= " ") ->
+    CharNum = fun([Character]) -> Character end,
+    (((CharNum(Char) - 65 + ShiftAmount) rem(26) + 26) rem 26) + 65;
+shiftChar(Char, ShiftAmount) ->
+    Char.
+encrypt(Str, ShiftAmount) ->
+    Shifted = lists:map(fun(Char) -> shiftChar([string:to_upper(Char)], ShiftAmount) end, Str).
+% Good old reliable: negative encrypt
+decrypt(Str, ShiftAmount) ->
+    encrypt(Str, ShiftAmount * -1).
+solve(Str, MaxShiftValue) ->
+    CaesarList = lists:seq(0, MaxShiftValue),
+    lists:foreach(fun(ShiftAmount) ->
+        Encrypted = encrypt(Str, ShiftAmount * -1),
+        io:fwrite("Caesar ~p: ~s~n", [ShiftAmount, Encrypted]),
+        encrypt(Str, ShiftAmount * -1) end, CaesarList).
+
+start() ->
+    Str = "I HOPE THIS WORKS",
+    io:format([Str]),
+    io:fwrite("\n"),
+    Encrypted = encrypt(Str, 5),
+    io:format([Encrypted]),
+    io:fwrite("\n"),
+    Decrypted = decrypt(Str, 26),
+    io:format([Decrypted]),
+    io:fwrite("\n"),
+    solve(Str, 26).

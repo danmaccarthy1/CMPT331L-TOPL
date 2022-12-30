@@ -1,0 +1,40 @@
+//Daniel MacCarthy
+object CaesarCipher {
+    
+    var str = "I HOPE THIS WORKS";
+    var shiftAmount = 4;
+
+    //shift the characters to keep them in the range
+    def shift(char: Char, shiftAmount: Int) : Char = {
+        if (char.toInt >= 65 && char.toInt <= 90) {
+            return ((char.toInt - 65 + shiftAmount + 26) % 26 + 65).toChar
+        } else {
+            return char
+        }
+    }
+    // encrypt using the shift
+	def encrypt(str: String, shiftAmount: Int) : String = {
+        return str.toUpperCase().map(char => shift(char, shiftAmount % 26))
+    }
+	// Decrypt using negative encrypt
+	def decrypt(str: String, shiftAmount: Int) = encrypt(str, shiftAmount * -1)
+	
+	// Solve with recursion
+	def solve(str: String, maxShiftValue: Int){
+		if (maxShiftValue > -1) {
+			println("Caesar " + maxShiftValue + ": " + encrypt(str, maxShiftValue))
+			solve(str, (maxShiftValue-1))
+		}
+	}
+	// run the functions
+	// fun fact I have no idea what (args: Array[String]) does or why I need it
+	def main(args: Array[String]){
+        val encrypted = encrypt(str, shiftAmount);
+        val decrypted = decrypt(encrypted, shiftAmount);
+
+        println(str);
+        println(encrypted);
+        println(decrypted);
+        solve(str,26);
+    }
+}

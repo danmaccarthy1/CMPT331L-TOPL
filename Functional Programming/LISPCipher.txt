@@ -1,0 +1,33 @@
+;;Daniel MacCarthy
+(defun offset (char shiftAmt)
+  (let* ((acii  (char-code  char)) (lower (char-code #\a)) (upper (char-code #\A)) 
+         (base (cond ((<= lower acii (char-code #\z)) lower) 
+                     ((<= upper acii (char-code #\Z)) upper) 
+                     (nil))))
+    (if base (code-char (+ (mod (+ (- acii base) shiftAmt) 26) base)) char)))
+ 
+(defun encrypt (str shiftAmt)
+  (map 'string #'(lambda (acii) (offset acii shiftAmt)) str))
+  
+;;I don't know how or why this works, I was trying random things, is that negative encrypt?
+(defun decrypt (str shiftAmt) (encrypt str (- shiftAmt)))
+
+(defun solve (str maxShiftValue) 
+  (loop for n from 0 to maxShiftValue
+    do (format T "Caesar ~D: ~a~%" n (encrypt str n))))
+
+
+(let* ((str "I HOPE THIS WORKS")
+       (shiftAmt 6)
+       (encrypted (encrypt str shiftAmt))
+       (decrypted (decrypt encrypted shiftAmt)))
+
+       (format T str)
+       (terpri)
+       (format T encrypted)
+       (terpri)
+       (format T decrypted)
+       (terpri)
+       (solve str 26)
+  )
+ 

@@ -1,0 +1,55 @@
+{Daniel MacCarthy}
+program Caesar;
+var 
+    Str: String;
+    x:String;
+    y:String;
+
+function encrypt(Str: String; shiftAmount: Integer): String;
+var
+	i, temp: Integer;
+	caps: String;
+begin
+	caps := UpCase(Str);
+	for i := 1 to length(caps) do
+	begin
+		temp := (byte(caps[i]) - 65 + shiftAmount) mod integer(26);
+		if (temp < 0) then
+			begin
+				temp := temp + 26;
+			end;
+		temp := temp + 65;
+		if (byte(caps[i]) = 32) then
+			begin
+				temp := 32;
+			end;
+		caps[i] := chr(temp);
+
+	end;
+	encrypt := caps;
+end;
+
+function decrypt(Str: String; shiftAmount: Integer): String;
+begin
+	decrypt := encrypt(Str, shiftAmount * -1);
+end;
+
+procedure solve(Str: String; solveShift: Integer);
+var
+	i: Integer;
+begin
+	for i := 0 to solveShift do
+	begin
+		Writeln('Caesar ', i, ': ', encrypt(Str, i));
+	end;
+end;
+
+
+begin
+	Str := 'I HOPE THIS WORKS';
+	x := encrypt(Str, 4);
+	Writeln(x);
+	y := decrypt(Str, 0);
+	Writeln(y);
+	solve(y, 26);
+end.

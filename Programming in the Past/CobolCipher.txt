@@ -1,0 +1,79 @@
+*> Daniel MacCarthy
+IDENTIFICATION DIVISION.
+PROGRAM-ID. CaesarCipher.
+DATA DIVISION.
+WORKING-STORAGE SECTION.
+01 Str PIC X(100) VALUE "another test case".
+01 shiftAmount PIC 9(8) VALUE 5.
+01 solveShift PIC 9(8) VALUE 26.
+01 n PIC 9(3) VALUE 100.
+01 i PIC 9(3) VALUE 1.
+01 temp PIC X(100) VALUE " ".
+01 temp2 PIC X(1) VALUE " ".
+01 encrypted PIC X(100) VALUE " ".
+01 num PIC 9(8) VALUE 0.
+01 wrap PIC 9(8) VALUE 0.
+
+
+PROCEDURE DIVISION.
+
+Cipher.
+    PERFORM Encrypt
+    MOVE "ANOTHER TEST CASE" to Str
+    MOVE 16 to shiftAmount
+    MOVE 26 to shiftAmount
+    PERFORM Decrypt
+    MOVE "FSTYMJW YJXY HFXJ " to Str
+    PERFORM Solve
+    STOP RUN.
+
+Encrypt.
+    MOVE Str to temp
+    MOVE FUNCTION upper-case(temp) to temp
+    MOVE 1 to i
+    MOVE " " to encrypted
+    PERFORM n TIMES
+        MOVE temp(i:1) to temp2
+        MOVE function ord(temp2) to num
+        if num > 65 and num < 92 then
+            ADD shiftAmount to num
+            if num > 91 then
+                SUBTRACT 91 from num 
+                ADD 65 to num
+            end-if
+            MOVE function char(num) to temp2
+        end-if
+        STRING temp2 DELIMITED BY SIZE into encrypted with pointer i
+    END-PERFORM
+    DISPLAY encrypted.
+    
+Decrypt.
+    MOVE Str to temp
+    MOVE FUNCTION upper-case(temp) to temp
+    MOVE 1 to i
+    MOVE " " to encrypted
+    PERFORM n TIMES
+        MOVE temp(i:1) to temp2
+        MOVE function ord(temp2) to num
+        if num > 65 and num < 92 then
+            SUBTRACT shiftAmount FROM num
+            if num < 66 then
+                SUBTRACT num from 66 GIVING wrap 
+                SUBTRACT wrap from 92 GIVING num
+            end-if
+            MOVE function char(num) to temp2
+        end-if
+        STRING temp2 DELIMITED BY SIZE into encrypted with pointer i
+    END-PERFORM
+    DISPLAY encrypted.
+    
+Solve.
+    MOVE solveShift to shiftAmount
+    ADD 1 to solveShift
+    PERFORM 26 TIMES
+        DISPLAY "CAESER : " WITH NO ADVANCING
+        PERFORM Decrypt
+        SUBTRACT 1 from shiftAmount
+    END-PERFORM.
+    
+    CaesarCipher.

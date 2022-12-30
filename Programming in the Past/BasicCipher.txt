@@ -1,0 +1,49 @@
+Sub Encrypt(strings As String, shiftAmount As Integer)
+  Dim temp As Integer
+  For i As Integer = 0 To Len(strings) 
+    Select Case As Const strings[i] 
+      Case 65 To 90   
+        temp = strings[i] + shiftAmount
+        If temp > 90 Then temp -= 26
+          strings[i] = temp
+      Case 97 To 122
+        temp = strings[i] + shiftAmount
+        If temp > 122 Then temp -= 26
+          strings[i] = temp
+    End Select
+  Next
+End Sub
+
+Sub Decrypt(strings As String, shiftAmount As Integer)
+  Dim temp As Integer
+  For i As Integer = 0 To Len(strings) 
+  Select Case As Const strings[i] 
+  Case 65 To 90    
+    temp = strings[i] - shiftAmount
+    If temp < 65 Then temp += 26
+      strings[i] = temp
+  Case 97 To 122
+    temp = strings[i] - shiftAmount
+    If temp < 97 Then temp += 26
+      strings[i] = temp
+  End Select
+  Next
+End Sub
+
+Sub Solve(strings As String, solveShift As Integer)
+  for i As Integer = 0 to solveSHift
+    Encrypt strings, i
+    Print "CAESAR:" + str(i) + ": " + strings
+  Next
+End Sub
+
+Dim As String strings = "I HOPE THIS WORKS" 
+Dim As Integer offset = 4
+Dim As String encrypted
+
+Encrypt strings, offset
+Print strings
+encrypted = strings
+Decrypt strings, offset
+Print strings
+Solve strings, 26

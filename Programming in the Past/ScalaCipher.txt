@@ -1,0 +1,51 @@
+// Daniel MacCarthy
+object CaesarCipher {
+    
+var Str: String = "I HOPE THIS WORKS"
+var shiftAmount: Int = 4
+
+    def encrypt(Str:String, shiftAmount:Int) : String = {
+        var value: Int = 0
+        var encrypted: String = ""
+        var num: Int = 0
+        var Char: Char = 'x'
+        
+        
+        var temp:String = Str.toUpperCase()
+        var i : Int = 0
+        
+        for (i <- 0 until Str.length()){
+            Char = temp.charAt(i)
+            value = Char.toInt
+            if (value == 32){
+                num = 32
+            } else {
+                num = ((value + shiftAmount - 65) % 26) + 65
+            }
+            Char = num.toChar
+            encrypted = encrypted + Char
+        }
+        return encrypted
+    }
+    
+    def decrypt(Str: String, shiftAmount:Int) : String = {
+        var temp: Int = 30 - shiftAmount
+        return(encrypt(Str, temp))
+    }
+    
+    def solve(Str:String, solveShift:Int){
+        var i : Int = 0
+        for (i <- 0 to solveShift){
+            print("CAESAR " + i + ": ")
+            println(encrypt(Str, i))
+        }
+    }
+
+    def main(args: Array[String]) {
+        var x: String = encrypt(Str, shiftAmount)
+        println(x)
+        var y: String = decrypt(Str, shiftAmount)
+        println(y)
+        solve(y, 26)
+    }
+}

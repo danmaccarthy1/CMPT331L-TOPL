@@ -1,0 +1,29 @@
+(*Daniel MacCarthy*)
+(*shift is a reserved word... that annoyed me*)
+fun caesarShift(char, shiftAmount) = let
+	val asciiValue = Char.ord(Char.toUpper(char))
+	in
+	if asciiValue >= 65 andalso asciiValue <= 90 then
+        Char.chr( (asciiValue - 65 + shiftAmount) mod(26) + 65)
+	else Char.chr(asciiValue)
+	end
+
+fun encrypt (str, shiftAmount) = (
+	String.implode(map (fn char => caesarShift(char, shiftAmount) ) (String.explode(str)) )
+)
+
+(*Negative Encrypt*)
+fun decrypt (str, shiftAmount) = encrypt (str, shiftAmount * ~1);
+
+fun solve(str, maxShiftValue) = (
+	print("Caesar " ^ Int.toString(maxShiftValue) ^  ": " ^ encrypt(str, maxShiftValue) ^ "\n");
+	if maxShiftValue > 0
+	  then solve(str, maxShiftValue - 1)
+	else print("")
+)
+
+val str = "I HOPE THIS WORKS";
+print(str ^ "\n");
+print(encrypt(str, 4) ^ "\n");
+print(decrypt(str, 26) ^ "\n");
+solve(str, 26);

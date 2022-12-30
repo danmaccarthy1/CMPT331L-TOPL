@@ -1,0 +1,74 @@
+! Daniel MacCarthy
+PROGRAM CaesarCipher
+IMPLICIT NONE
+character(len=16) :: EStr = "I HOPE THIS WORKS"
+character(len=16) :: DStr = "M LSTI XLMW ASVOW "
+character(len=16) :: SStr = "C BIJY NBCM QILEM" 
+call encrypt(EStr, 4)
+
+call decrypt(DStr, 4)
+
+call solve(SStr, 26)
+
+contains
+ 
+subroutine toupper(x)
+character(len=*) :: x
+integer :: i
+do i=1,len(x)
+  if(x(i:i) >= "a" .and. x(i:i) <="z") then
+    x(i:i) = achar(iachar(x(i:i)) - 32)
+  else
+    x(i:i) = x(i:i)
+  endif
+end do
+end subroutine toupper
+
+subroutine encrypt(Str, shiftAmount)
+character(len=*) :: Str
+integer :: move, shiftAmount
+character(len=len(Str)) :: encyrpted
+integer :: i
+encyrpted = Str
+call toupper(encyrpted)
+move = mod(shiftAmount, 26)
+do i=1,len(Str)
+  if(encyrpted(i:i) >= "A" .and. encyrpted(i:i) <= "Z") then
+    encyrpted(i:i)= achar(iachar(encyrpted(i:i)) + move)
+    if(encyrpted(i:i) > "Z") then
+      encyrpted(i:i) = achar(iachar("A") + (iachar(encyrpted(i:i)) - iachar("Z") - 1))
+    endif
+  endif
+end do
+print *,encyrpted
+end subroutine encrypt
+
+subroutine decrypt(Str, shiftAmount)
+character(len=*) :: Str
+integer :: move, i, shiftAmount
+character(len=len(Str)) :: encyrpted
+encyrpted = Str
+call toupper(encyrpted)
+move = mod(shiftAmount, 26)
+do i=1,len(Str)
+  if(encyrpted(i:i) >= "A" .and. encyrpted(i:i) <= "Z") then
+    encyrpted(i:i)=achar(iachar(encyrpted(i:i)) - move)
+    if(encyrpted(i:i) < "A") then
+      encyrpted(i:i) = achar(iachar("Z") - (iachar("A") - iachar(encyrpted(i:i)) - 1))
+    endif
+  endif
+end do
+print *,encyrpted
+end subroutine decrypt
+
+subroutine solve(Str, solveShift)
+character(len=*) :: Str
+integer :: shiftAmount, solveShift
+do shiftAmount=solveShift,0,-1
+  write (*,"(A)",advance="no") "CAESAR "
+  write (*,"(I2)",advance="no") shiftAmount
+  call decrypt(Str, shiftAmount)
+end do
+end subroutine solve
+
+end program CaesarCipher
